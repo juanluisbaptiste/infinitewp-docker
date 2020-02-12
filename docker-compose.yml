@@ -1,7 +1,9 @@
 version: "3.3"
 services:
     wordpress:
-        image: hendrik44/infinitewp-docker
+#        image: hendrik44/infinitewp-docker
+        image: juanluisbaptiste/infinitewp
+        build: .
         hostname: infinitewp
         container_name: infinitewp
         cap_drop:
@@ -13,8 +15,8 @@ services:
         depends_on:
             - mysql
         restart: always
-        # ports:
-        #     - 127.0.0.1:80:80
+        ports:
+             - 127.0.0.1:80:80
         links:
             - mysql
         labels:
@@ -30,10 +32,10 @@ services:
             - "traefik.frontend.headers.browserXSSFilter=true"
             - "traefik.frontend.headers.customBrowserXSSValue=X-XSS-Protection: 1; mode=block"
         volumes:
-          - iwp-data:/var/www/html
-        networks:
-          - internal
-          - proxy
+          - ./volumes/infinitewp:/var/www/html
+       # networks:
+       #  - internal
+       #   - proxy
 
     mysql:
         image: mariadb
@@ -47,7 +49,7 @@ services:
         labels:
             - traefik.enable=false
         volumes:
-          - db-data:/var/lib/mysql
+          - ./volumes/mysql:/var/lib/mysql
         restart: always
         networks:
           - internal
@@ -105,9 +107,8 @@ volumes:
   iwp-data:
   db-data:
 
-networks:
-  proxy:
-    external: true
-  internal:
-    external: false
-  
+          #networks:
+          #  proxy:
+          #    external: true
+          #  internal:
+          #    external: false
