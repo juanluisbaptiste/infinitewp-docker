@@ -2,18 +2,22 @@ FROM php:7.3-apache
 
 RUN apt-get update && apt-get install -y unzip
 
-RUN docker-php-ext-install mysqli
+RUN docker-php-ext-install mysqli && \
+    set -ex && \
+	  curl -o infinitewp.zip -fSL "https://infinitewp.com/iwp-admin-panel-download.php" && \
+		set -ex && \
+		mkdir -p /infinitewp && \
+		mkdir -p /tmp/infinitewp && \
+		unzip -aq infinitewp.zip -d /tmp/infinitewp && \
+		rm infinitewp.zip && \
+		ls -lth && \
+		cd /tmp/infinitewp/*/ && \
+		chown -R www-data:www-data .  && \
+		iwpPath=$(pwd) && \
+		mv * /infinitewp && \
+		cd .. && rm -fr $iwpPath && \
+		apt-get clean -y && apt-get autoremove -y
 
-RUN set -ex; \
-	curl -o infinitewp.zip -fSL "https://infinitewp.com/iwp-admin-panel-download.php";
-
-RUN set -ex; \
-		unzip -a infinitewp.zip; \
-		rm infinitewp.zip; \
-		cd */; \
-		chown -R www-data:www-data . ; \
-		iwpPath=$(pwd); \ 
-		mv * ../ ; \
-		cd .. && rm -rf $iwpPath;
-
-RUN apt-get clean -y && apt-get autoremove -y
+COPY run.sh /
+RUN  chmod 755 /run.sh
+ENTRYPOINT ["/run.sh"]
