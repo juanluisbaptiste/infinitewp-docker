@@ -38,16 +38,10 @@ services:
        #   - proxy
 
     mysql:
-        image: mariadb
+        image: mariadb:10.1
         hostname: database
         container_name: database
-        environment:
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: mydb
-          MYSQL_USER: mydb
-          MYSQL_PASSWORD: password
-        labels:
-            - traefik.enable=false
+        env_file: .env
         volumes:
           - ./volumes/mysql:/var/lib/mysql
         restart: always
