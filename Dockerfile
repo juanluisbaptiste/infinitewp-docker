@@ -9,7 +9,6 @@ RUN apt-get update && apt-get install -y cron unzip && \
 		mkdir -p /tmp/infinitewp && \
 		unzip -aq infinitewp.zip -d /tmp/infinitewp && \
 		rm infinitewp.zip && \
-		ls -lth && \
 		cd /tmp/infinitewp/*/ && \
 		chown -R www-data:www-data .  && \
 		iwpPath=$(pwd) && \
