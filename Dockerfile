@@ -1,8 +1,7 @@
 FROM php:7.3-apache
 
-RUN apt-get update && apt-get install -y unzip
-
-RUN docker-php-ext-install mysqli && \
+RUN apt-get update && apt-get install -y cron unzip && \
+    docker-php-ext-install mysqli && \
     set -ex && \
 	  curl -o infinitewp.zip -fSL "https://infinitewp.com/iwp-admin-panel-download.php" && \
 		set -ex && \
